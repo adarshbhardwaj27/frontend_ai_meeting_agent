@@ -1,14 +1,10 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import { AnimatePresence } from 'framer-motion'
-import { Video, Plus } from 'lucide-react'
+import { Video, Plus, Loader2 } from 'lucide-react'
 import MeetingCard from './MeetingCard'
+import { api } from '../../api/client'
 
-let _id = 0
-const mkId = () => ++_id
-
-function now() {
-  return new Date().toLocaleTimeString('en-GB', { hour12: false })
-}
+const POLL_MS = 2500
 
 function validateUrl(raw) {
   try {
@@ -21,72 +17,82 @@ function validateUrl(raw) {
   }
 }
 
+function fromApi(s) {
+  return {
+    id:        s.id,
+    url:       s.meeting_url,
+    status:    s.status,
+    startedAt: new Date(s.started_at).getTime(),
+    events:    (s.events ?? []).map((e, i) => ({ id: e.id ?? i, ...e })),
+  }
+}
+
 export default function MeetingsTab() {
   const [url,      setUrl]      = useState('')
   const [urlError, setUrlError] = useState('')
   const [sessions, setSessions] = useState([])
+  const [joining,  setJoining]  = useState(false)
+  const polls = useRef({})
 
-  const addEvent = useCallback((id, evt) => {
-    setSessions(prev => prev.map(s =>
-      s.id === id
-        ? { ...s, events: [...s.events, { id: mkId(), ...evt }] }
-        : s
-    ))
+  // Load existing sessions on mount
+  useEffect(() => {
+    api.getSessions()
+      .then(({ sessions: list }) => {
+        const active = list.filter(s => s.status !== 'ENDED')
+        setSessions(active.map(fromApi))
+        active.forEach(s => startPolling(s.id))
+      })
+      .catch(console.error)
+    return () => Object.values(polls.current).forEach(clearInterval)
   }, [])
 
-  const setStatus = useCallback((id, status) => {
-    setSessions(prev => prev.map(s => s.id === id ? { ...s, status } : s))
-  }, [])
+  function startPolling(id) {
+    if (polls.current[id]) return
+    polls.current[id] = setInterval(async () => {
+      try {
+        const data = await api.getSession(id)
+        setSessions(prev => prev.map(s => s.id === id ? fromApi(data) : s))
+        if (['ENDED', 'FAILED'].includes(data.status)) {
+          clearInterval(polls.current[id])
+          delete polls.current[id]
+          if (data.status === 'ENDED') {
+            setTimeout(() => setSessions(prev => prev.filter(s => s.id !== id)), 3000)
+          }
+        }
+      } catch {
+        clearInterval(polls.current[id])
+        delete polls.current[id]
+      }
+    }, POLL_MS)
+  }
 
-  const handleJoin = () => {
+  const handleJoin = async () => {
     const trimmed = url.trim()
     if (!trimmed) { setUrlError('Paste a meeting URL above.'); return }
     if (!validateUrl(trimmed)) { setUrlError('Must be a valid Teams, Zoom, or Google Meet URL.'); return }
-
     setUrlError('')
     setUrl('')
-
-    const id = mkId()
-    const session = {
-      id,
-      url:       trimmed,
-      status:    'CONNECTING',
-      startedAt: Date.now(),
-      events: [
-        { id: mkId(), type: 'info',   message: 'Requesting bot from Recall.ai…', time: now() },
-      ],
+    setJoining(true)
+    try {
+      const { session_id } = await api.createSession(trimmed)
+      const data = await api.getSession(session_id)
+      setSessions(prev => [...prev, fromApi(data)])
+      startPolling(session_id)
+    } catch (e) {
+      setUrlError(e.message || 'Failed to start session — check your connection.')
+    } finally {
+      setJoining(false)
     }
-    setSessions(prev => [...prev, session])
-
-    // Simulate join flow
-    setTimeout(() => {
-      addEvent(id, { type: 'info',    message: 'Bot provisioned — joining meeting room…', time: now() })
-    }, 800)
-    setTimeout(() => {
-      const ok = Math.random() > 0.15 // 85% success rate for demo
-      if (ok) {
-        setStatus(id, 'JOINED')
-        addEvent(id, { type: 'success', message: 'Bot joined successfully — transcript stream active.', time: now() })
-        setTimeout(() => {
-          addEvent(id, { type: 'active', message: 'Listening for AI triggers…', time: now() })
-        }, 1200)
-      } else {
-        setStatus(id, 'FAILED')
-        addEvent(id, { type: 'error',   message: 'Failed to join — meeting may have ended or access denied.', time: now() })
-      }
-    }, 2200)
   }
 
-  const handleLeave = useCallback((id) => {
-    setStatus(id, 'LEAVING')
-    addEvent(id, { type: 'info', message: 'Bot leaving meeting…', time: now() })
-    setTimeout(() => {
-      addEvent(id, { type: 'success', message: 'Bot removed from meeting successfully.', time: now() })
-      setTimeout(() => {
-        setSessions(prev => prev.filter(s => s.id !== id))
-      }, 1200)
-    }, 1400)
-  }, [setStatus, addEvent])
+  const handleLeave = useCallback(async (id) => {
+    setSessions(prev => prev.map(s => s.id === id ? { ...s, status: 'LEAVING' } : s))
+    try {
+      await api.deleteSession(id)
+    } catch (e) {
+      console.error('Leave failed:', e)
+    }
+  }, [])
 
   return (
     <div className="flex flex-col gap-6">
@@ -102,17 +108,21 @@ export default function MeetingsTab() {
               type="url"
               value={url}
               onChange={e => { setUrl(e.target.value); setUrlError('') }}
-              onKeyDown={e => e.key === 'Enter' && handleJoin()}
+              onKeyDown={e => e.key === 'Enter' && !joining && handleJoin()}
               placeholder="https://teams.live.com/meet/… or teams.microsoft.com/…"
               className="input-field font-mono text-xs h-11"
+              disabled={joining}
             />
             {urlError && <p className="text-xs text-red-400 mt-1.5">{urlError}</p>}
           </div>
           <button
             onClick={handleJoin}
-            className="btn-primary h-11 px-6 shrink-0 gap-2"
+            disabled={joining}
+            className="btn-primary h-11 px-6 shrink-0 gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            <Plus size={15} /> Join Meeting
+            {joining
+              ? <><Loader2 size={15} className="animate-spin" /> Joining…</>
+              : <><Plus size={15} /> Join Meeting</>}
           </button>
         </div>
         <p className="mt-3 text-[11px] text-gray-600">
