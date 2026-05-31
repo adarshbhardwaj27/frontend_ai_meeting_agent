@@ -89,8 +89,12 @@ export default function MeetingsTab() {
     setSessions(prev => prev.map(s => s.id === id ? { ...s, status: 'LEAVING' } : s))
     try {
       await api.deleteSession(id)
+      clearInterval(polls.current[id])
+      delete polls.current[id]
+      setTimeout(() => setSessions(prev => prev.filter(s => s.id !== id)), 1500)
     } catch (e) {
       console.error('Leave failed:', e)
+      setSessions(prev => prev.map(s => s.id === id ? { ...s, status: 'JOINED' } : s))
     }
   }, [])
 

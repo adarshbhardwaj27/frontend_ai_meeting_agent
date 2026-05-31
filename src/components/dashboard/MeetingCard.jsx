@@ -8,6 +8,8 @@ const STATUS_CFG = {
   JOINED:     { label: 'Live',          dot: 'bg-teal-400 animate-pulse',  text: 'text-teal-400',  badge: 'bg-teal-400/10 border-teal-400/30'  },
   FAILED:     { label: 'Failed',        dot: 'bg-red-400',                 text: 'text-red-400',   badge: 'bg-red-400/10 border-red-400/30'    },
   LEAVING:    { label: 'Leaving…',      dot: 'bg-gray-400 animate-pulse',  text: 'text-gray-400',  badge: 'bg-gray-400/10 border-gray-400/30'  },
+  ENDED:      { label: 'Ended',         dot: 'bg-gray-600',                text: 'text-gray-500',  badge: 'bg-gray-500/10 border-gray-500/30'  },
+  IN_CALL_NOT_RECORDING: { label: 'In Call', dot: 'bg-teal-400 animate-pulse', text: 'text-teal-400', badge: 'bg-teal-400/10 border-teal-400/30' },
 }
 
 function elapsed(startedAt) {
@@ -19,7 +21,7 @@ function elapsed(startedAt) {
 
 export default function MeetingCard({ meeting, onLeave }) {
   const [expanded, setExpanded] = useState(true)
-  const cfg = STATUS_CFG[meeting.status]
+  const cfg = STATUS_CFG[meeting.status] ?? { label: meeting.status, dot: 'bg-gray-600', text: 'text-gray-500', badge: 'bg-gray-500/10 border-gray-500/30' }
 
   return (
     <motion.div
