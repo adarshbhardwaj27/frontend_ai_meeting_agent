@@ -2,7 +2,7 @@ name: Deploy Frontend
 
 on:
   push:
-    branches: [main]
+    branches: [master]
 
 env:
   REGISTRY: ghcr.io
@@ -58,8 +58,10 @@ jobs:
             set -e
             cd /opt/meetmind
 
-            docker compose pull web
-            docker compose up -d --no-deps web
+            docker-compose pull web
+            docker-compose stop web || true
+            docker-compose rm -f web || true
+            docker-compose up -d --no-deps web
             docker image prune -f --filter "until=72h"
 
             echo "✅ Frontend deployed at $(date)"
