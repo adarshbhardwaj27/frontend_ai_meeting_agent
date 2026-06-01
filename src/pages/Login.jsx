@@ -7,7 +7,7 @@ import { useAuth } from '../context/AuthContext'
 export default function Login() {
   const { login }       = useAuth()
   const navigate        = useNavigate()
-  const [username,  setUsername]  = useState('')
+  const [email,    setEmail]    = useState('')
   const [password,  setPassword]  = useState('')
   const [showPass,  setShowPass]  = useState(false)
   const [error,     setError]     = useState('')
@@ -17,13 +17,11 @@ export default function Login() {
     e.preventDefault()
     setError('')
     setLoading(true)
-    // Simulate brief network delay for polish
-    await new Promise(r => setTimeout(r, 600))
-    const ok = login(username, password)
-    if (ok) {
+    try {
+      await login(email, password)
       navigate('/dashboard', { replace: true })
-    } else {
-      setError('Username and password cannot be empty.')
+    } catch (err) {
+      setError(err.message ?? 'Invalid email or password.')
       setLoading(false)
     }
   }
@@ -79,14 +77,14 @@ export default function Login() {
             {/* Username */}
             <div>
               <label className="block text-xs font-semibold text-gray-400 mb-1.5 uppercase tracking-wide">
-                Username
+                Email
               </label>
               <input
-                type="text"
-                value={username}
-                onChange={e => setUsername(e.target.value)}
-                placeholder="admin"
-                autoComplete="username"
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="admin@yourcompany.com"
+                autoComplete="email"
                 className="input-field"
               />
             </div>
@@ -134,7 +132,7 @@ export default function Login() {
           </form>
 
           <p className="mt-6 text-center text-xs text-gray-600">
-            <span className="text-gray-500">Demo credentials: any username + any password</span>
+            <span className="text-gray-500">Contact your admin for access.</span>
           </p>
         </motion.div>
 

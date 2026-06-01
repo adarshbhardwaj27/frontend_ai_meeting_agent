@@ -1,14 +1,12 @@
 const BASE = import.meta.env.VITE_API_URL ?? 'https://api.taskora.in.net'
-const KEY  = import.meta.env.VITE_API_KEY  ?? ''
 
-function authHeaders() {
-  return { 'Content-Type': 'application/json', 'X-API-Key': KEY }
-}
-
+// All requests send the httpOnly cookie automatically via credentials: 'include'.
+// No API key header needed — auth is handled server-side via JWT cookie.
 async function req(path, opts = {}) {
   const res = await fetch(`${BASE}${path}`, {
     ...opts,
-    headers: { ...authHeaders(), ...opts.headers },
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json', ...opts.headers },
   })
   if (!res.ok) {
     const body = await res.json().catch(() => ({}))
@@ -18,6 +16,12 @@ async function req(path, opts = {}) {
 }
 
 export const api = {
+  // Auth
+  login:  (email, password) => req('/auth/login',  { method: 'POST', body: JSON.stringify({ email, password }) }),
+  logout: ()                => req('/auth/logout', { method: 'POST' }),
+  me:     ()                => req('/auth/me'),
+
+  // Sessions
   getSessions:   ()           => req('/api/v1/sessions'),
   getSession:    (id)         => req(`/api/v1/sessions/${id}`),
   createSession: (meetingUrl) => req('/api/v1/sessions', {
@@ -35,7 +39,7 @@ export const api = {
     ;(async () => {
       try {
         const res = await fetch(`${BASE}/api/v1/sessions/${sessionId}/logs`, {
-          headers: authHeaders(),
+          credentials: 'include',
           signal: ctrl.signal,
         })
         const reader = res.body.getReader()
