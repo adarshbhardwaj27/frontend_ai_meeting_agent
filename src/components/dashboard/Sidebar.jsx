@@ -9,11 +9,11 @@ const NAV = [
 ]
 
 export default function Sidebar({ activeTab, onTabChange }) {
-  const { logout } = useAuth()
-  const navigate   = useNavigate()
+  const { logout, company, user } = useAuth()
+  const navigate = useNavigate()
 
-  const handleLogout = () => {
-    logout()
+  const handleLogout = async () => {
+    await logout()
     navigate('/login', { replace: true })
   }
 
@@ -25,7 +25,7 @@ export default function Sidebar({ activeTab, onTabChange }) {
           <Zap size={15} className="text-navy-900" strokeWidth={2.5} />
         </div>
         <div>
-          <p className="text-sm font-bold text-white leading-tight">MeetMind AI</p>
+          <p className="text-sm font-bold text-white leading-tight">{company?.name ?? 'MeetMind AI'}</p>
           <p className="text-[10px] text-gray-500 font-medium">Admin Portal</p>
         </div>
       </div>
@@ -68,6 +68,9 @@ export default function Sidebar({ activeTab, onTabChange }) {
           <span className="text-xs">←</span>
           <span>View Landing Page</span>
         </Link>
+        {user?.email && (
+          <p className="text-[10px] text-gray-600 truncate px-3 mb-1">{user.email}</p>
+        )}
         <button
           onClick={handleLogout}
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-500 hover:text-red-400 hover:bg-red-500/8 transition-all duration-200"
