@@ -2,10 +2,24 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Zap, LayoutDashboard, FileText, Settings, LogOut, ChevronRight } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 
+// Inline Microsoft icon (avoids external icon dependency)
+function MicrosoftIcon({ size = 16 }) {
+  const s = size * 0.45
+  return (
+    <svg width={size} height={size} viewBox="0 0 21 21" fill="none">
+      <rect x="1" y="1" width={s * 2} height={s * 2} fill="#f25022" />
+      <rect x={1 + s * 2 + 1} y="1" width={s * 2} height={s * 2} fill="#7fba00" />
+      <rect x="1" y={1 + s * 2 + 1} width={s * 2} height={s * 2} fill="#00a4ef" />
+      <rect x={1 + s * 2 + 1} y={1 + s * 2 + 1} width={s * 2} height={s * 2} fill="#ffb900" />
+    </svg>
+  )
+}
+
 const NAV = [
-  { icon: LayoutDashboard, label: 'Meetings',   tab: 'meetings' },
-  { icon: FileText,        label: 'Debug Logs', tab: 'logs' },
-  { icon: Settings,        label: 'Settings',   tab: 'settings', disabled: true },
+  { icon: LayoutDashboard, label: 'Meetings',       tab: 'meetings' },
+  { icon: FileText,        label: 'Debug Logs',     tab: 'logs' },
+  { icon: MicrosoftIcon,   label: 'Microsoft 365',  tab: 'microsoft' },
+  { icon: Settings,        label: 'Settings',       tab: 'settings', disabled: true },
 ]
 
 export default function Sidebar({ activeTab, onTabChange }) {

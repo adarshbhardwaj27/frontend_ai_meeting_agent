@@ -30,6 +30,13 @@ export const api = {
   }),
   deleteSession: (id) => req(`/api/v1/sessions/${id}`, { method: 'DELETE' }),
 
+  // Microsoft 365
+  microsoftStatus:     ()        => req('/api/v1/microsoft/status'),
+  microsoftFilters:    (filters) => req('/api/v1/microsoft/filters', { method: 'PUT', body: JSON.stringify(filters) }),
+  microsoftDisconnect: ()        => req('/api/v1/microsoft/disconnect', { method: 'DELETE' }),
+  // Connect is a browser redirect — not a fetch call. Use window.location.
+  microsoftConnectUrl: () => `${BASE}/auth/microsoft/connect`,
+
   /**
    * Stream logs for a session via SSE (using fetch so we can send auth headers).
    * Returns a cancel function.
