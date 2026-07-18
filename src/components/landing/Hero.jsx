@@ -153,8 +153,8 @@ export default function Hero() {
 
             {/* Chat body */}
             <div className="p-5 space-y-4 bg-navy-900/40">
-              <ChatBubble speaker="Sarah Chen"  text="What were the risks we flagged earlier? I can't remember what we decided on the vendor issue…" delay={0.6} />
-              <ChatBubble speaker="James Park"  text="I think we said something about Recall.ai lock-in but I lost track of the conclusion." delay={0.9} />
+              <ChatBubble speaker="Sarah Chen"  text="Before we move on — what did we land on for the auth migration risk? I want to make sure it's captured." delay={0.6} />
+              <ChatBubble speaker="James Park"  text="I know we flagged the timeline slipping, but I lost track of what we actually decided." delay={0.9} />
 
               {/* Trigger indicator */}
               <motion.div
@@ -173,7 +173,7 @@ export default function Hero() {
               <ChatBubble
                 speaker="Alex (AI)"
                 isAI
-                text="Earlier (23 min ago) Sarah raised 3 risks: ① API latency > 500ms (flagged P1), ② Vendor lock-in with Recall.ai, ③ Cost at scale > 10K meetings/day. Decision: proceed with Sprint 8 latency fix before scaling."
+                text="Earlier (23 min ago) Sarah raised 3 risks: ① Auth migration timeline slipping ~2 weeks, ② Need sign-off from Security before go-live, ③ Support load during the cutover window. Decision: phased rollout, Security review by Friday."
                 delay={1.4}
               />
 
@@ -201,7 +201,7 @@ export default function Hero() {
             className="absolute -bottom-5 -left-5 card-glass px-4 py-2.5 shadow-xl shadow-black/30"
           >
             <p className="text-[10px] text-gray-500 mb-0.5">Response latency</p>
-            <p className="text-xl font-bold text-gradient">~450 ms</p>
+            <p className="text-xl font-bold text-gradient">&lt;1 second</p>
           </motion.div>
 
           {/* Floating stat — triggers */}

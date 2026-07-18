@@ -38,8 +38,7 @@ export default function Features() {
             12 Types of Meeting Intelligence
           </h2>
           <p className="section-sub mx-auto">
-            A multi-layer pipeline: local probabilistic scoring → GPT-4 adjudication → response generation.
-            Zero false positives. Zero noise.
+            A multi-layer pipeline: local probabilistic scoring → AI adjudication → response generation.
           </p>
         </motion.div>
 

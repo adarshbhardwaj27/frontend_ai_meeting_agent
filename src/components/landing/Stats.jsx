@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 
 const STATS = [
-  { end: 37,   suffix: 'B',  prefix: '$', label: 'Lost annually to unproductive meetings',  sub: 'Harvard Business Review' },
-  { end: 55,   suffix: 'M+', prefix: '',  label: 'Meetings held every day in the US',       sub: 'Doodle Meeting Report' },
-  { end: 40,   suffix: '%',  prefix: '',  label: 'Of the knowledge workday spent in meetings', sub: 'Microsoft WorkLab' },
-  { end: 600,  suffix: 'M+', prefix: '',  label: 'Teams & Zoom daily active users',          sub: 'Microsoft + Zoom 2025' },
+  { end: 399,  suffix: 'B',  prefix: '$', label: 'Lost annually to poorly organized meetings in the US',       sub: 'Doodle, State of Meetings Report' },
+  { end: 70,   suffix: '%',  prefix: '',  label: "Of what's discussed in a meeting is forgotten within 24 hours", sub: 'Ebbinghaus Forgetting Curve' },
+  { end: 52,   suffix: '%',  prefix: '',  label: 'Of employees admit to multitasking during virtual meetings', sub: 'Calendly, State of Meetings 2024' },
+  { end: 21,   suffix: 'B',  prefix: '$', label: 'Projected size of the AI meeting assistant market by 2033',  sub: 'Grand View Research, 25.8% CAGR' },
 ]
 
 function CountUp({ end, duration = 1.8 }) {

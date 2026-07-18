@@ -40,12 +40,12 @@ export default function CTASection() {
 
           <p className="section-sub mx-auto mb-10">
             Join the waitlist and be among the first companies to deploy Alex across your organisation.
-            Early access includes onboarding support and a 90-day free pilot.
+            Early access includes onboarding support.
           </p>
 
           {/* Benefits */}
           <div className="flex flex-wrap justify-center gap-4 mb-10">
-            {['Free 90-day pilot', 'Dedicated onboarding', 'Cancel any time', 'SOC2 compliant (Q4 2026)'].map(b => (
+            {['Dedicated onboarding', 'Cancel any time'].map(b => (
               <div key={b} className="flex items-center gap-1.5 text-sm text-gray-400">
                 <CheckCircle size={14} className="text-teal-400" />
                 {b}

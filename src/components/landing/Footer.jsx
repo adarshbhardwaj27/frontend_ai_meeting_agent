@@ -65,9 +65,6 @@ export default function Footer() {
             <Link to="/login" className="text-xs text-gray-600 hover:text-teal-400 transition-colors">
               Admin Portal
             </Link>
-            <span className="text-xs text-gray-700">
-              Built with GPT-4, Recall.ai, ElevenLabs
-            </span>
           </div>
         </div>
       </div>

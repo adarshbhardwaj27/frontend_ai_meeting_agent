@@ -9,7 +9,7 @@ const STEPS = [
     glow: 'shadow-teal-500/30',
     title: 'Joins',
     sub: 'Zero setup for attendees',
-    desc: 'Alex enters your Microsoft Teams or Zoom call as a named bot participant via Recall.ai — no downloads, no extensions, no disruption.',
+    desc: 'Alex enters your Microsoft Teams or Zoom call as a named bot participant — no downloads, no extensions, no disruption.',
   },
   {
     num: '02',
@@ -36,7 +36,7 @@ const STEPS = [
     glow: 'shadow-amber-400/30',
     title: 'Contributes',
     sub: 'Precisely when it matters',
-    desc: 'A multi-layer intelligence pipeline detects the moment to speak up. GPT-4 adjudication filters noise before any message enters the meeting.',
+    desc: 'A multi-layer intelligence pipeline detects the moment to speak up. AI adjudication filters noise before any message enters the meeting.',
   },
 ]
 
@@ -56,7 +56,7 @@ export default function HowItWorks() {
           </span>
           <h2 className="section-title">How Alex Works</h2>
           <p className="section-sub mx-auto">
-            From spoken word to real-time insight in under 500 milliseconds.
+            From spoken word to real-time insight — as the conversation happens.
           </p>
         </motion.div>
 
@@ -93,27 +93,6 @@ export default function HowItWorks() {
           })}
         </div>
 
-        {/* Latency banner */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          className="mt-14 card border border-teal-500/15 bg-teal-500/5 p-5 flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 text-center"
-        >
-          {[
-            ['0 ms',   'Audio captured'],
-            ['100 ms', 'Transcript streamed'],
-            ['250 ms', 'Trigger detected'],
-            ['300 ms', 'LLM reasoning'],
-            ['~450 ms','Response delivered'],
-          ].map(([time, label]) => (
-            <div key={label} className="flex flex-col items-center">
-              <span className="text-lg font-bold text-teal-400">{time}</span>
-              <span className="text-xs text-gray-500">{label}</span>
-            </div>
-          ))}
-        </motion.div>
       </div>
     </section>
   )

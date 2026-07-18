@@ -13,7 +13,7 @@ const LOG_TEMPLATES = [
   // DEBUG
   { level: 'DEBUG',   text: 'Local scorer — TOPIC_DRIFT: {s1}, MEMORY_GAP: {s2}, VOICE_ADDRESS: {s3}' },
   { level: 'DEBUG',   text: 'Dispatching trigger to LLM service (priority P{p}, timeout {t}s)' },
-  { level: 'DEBUG',   text: 'LLM call started — model: gpt-4-turbo-preview, timeout: {t}s' },
+  { level: 'DEBUG',   text: 'LLM call started — timeout: {t}s' },
   { level: 'DEBUG',   text: 'LLM response parsed — decision: SUPPRESS, confidence: {conf}' },
   { level: 'DEBUG',   text: 'Queue size: {q} items, active priority: P{p}' },
   { level: 'DEBUG',   text: 'Chunk id: {id} added to buffer (total: {total} chunks in window)' },
@@ -22,19 +22,19 @@ const LOG_TEMPLATES = [
   // SUCCESS
   { level: 'SUCCESS', text: 'VOICE_ADDRESS detected — "{name}, what are the trade-offs?" (conf: {conf})' },
   { level: 'SUCCESS', text: 'LLM decision: SEND (confidence: {conf}) — dispatching response' },
-  { level: 'SUCCESS', text: 'Voice reply synthesised and delivered in {ms}ms (ElevenLabs)' },
+  { level: 'SUCCESS', text: 'Voice reply synthesised and delivered in {ms}ms' },
   { level: 'SUCCESS', text: 'Decision CONFIRMED: {topic} — moved to decisions_confirmed' },
   { level: 'SUCCESS', text: 'Transcript streaming active — WebSocket healthy' },
   // WARNING
   { level: 'WARNING', text: 'LLM latency elevated: {lat}s (soft threshold: 6.0s)' },
   { level: 'WARNING', text: 'Backpressure — queue full ({n} items), dropping P{p} trigger' },
   { level: 'WARNING', text: 'Context window at {pct}% capacity — compression scheduled' },
-  { level: 'WARNING', text: 'ElevenLabs API slow response: {ms}ms' },
+  { level: 'WARNING', text: 'Voice synthesis API slow response: {ms}ms' },
   { level: 'WARNING', text: 'Low-confidence trigger suppressed: {type} (conf: {conf})' },
   // ERROR
   { level: 'ERROR',   text: 'TTS synthesis failed — falling back to chat delivery' },
   { level: 'ERROR',   text: 'LLM call timed out after {t}s — trigger suppressed' },
-  { level: 'ERROR',   text: 'Recall.ai API error {code} — retrying ({n}/3)' },
+  { level: 'ERROR',   text: 'Meeting bot API error {code} — retrying ({n}/3)' },
   { level: 'ERROR',   text: 'WebSocket disconnect — reconnecting to transcript stream…' },
 ]
 

@@ -36,7 +36,7 @@ export default function Platforms() {
             <h3 className="font-bold text-white mb-1">Microsoft Teams</h3>
             <p className="text-xs text-gray-500 mb-4">300M+ daily active users</p>
             <div className="flex flex-col gap-1.5 text-left">
-              {['Bot joins via Recall.ai', 'Real-time WebSocket transcript', 'Chat message delivery'].map(f => (
+              {['Zero-setup bot join', 'Real-time WebSocket transcript', 'Chat message delivery'].map(f => (
                 <div key={f} className="flex items-center gap-2 text-xs text-gray-400">
                   <CheckCircle size={12} className="text-teal-400 shrink-0" />
                   {f}
@@ -54,23 +54,23 @@ export default function Platforms() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="card card-hover border border-teal-500/20 p-6"
+            className="card border border-white/5 p-6 opacity-60"
           >
             <div className="w-14 h-14 rounded-xl bg-[#2D8CFF]/10 border border-[#2D8CFF]/20 flex items-center justify-center mx-auto mb-4">
               <span className="text-2xl font-black text-[#2D8CFF]">Z</span>
             </div>
-            <h3 className="font-bold text-white mb-1">Zoom</h3>
-            <p className="text-xs text-gray-500 mb-4">300M+ daily meeting participants</p>
+            <h3 className="font-bold text-gray-500 mb-1">Zoom</h3>
+            <p className="text-xs text-gray-600 mb-4">300M+ daily meeting participants</p>
             <div className="flex flex-col gap-1.5 text-left">
-              {['Bot joins via Recall.ai', 'Speaker-diarized transcript', 'Chat + voice reply'].map(f => (
-                <div key={f} className="flex items-center gap-2 text-xs text-gray-400">
-                  <CheckCircle size={12} className="text-teal-400 shrink-0" />
+              {['Zero-setup bot join', 'Speaker-diarized transcript', 'Chat + voice reply'].map(f => (
+                <div key={f} className="flex items-center gap-2 text-xs text-gray-600">
+                  <div className="w-3 h-3 rounded-full border border-gray-600 shrink-0" />
                   {f}
                 </div>
               ))}
             </div>
-            <span className="mt-4 inline-block text-[10px] font-bold bg-teal-500/15 text-teal-400 border border-teal-500/30 px-2 py-1 rounded-full">
-              LIVE
+            <span className="mt-4 inline-block text-[10px] font-bold bg-gray-700/50 text-gray-500 border border-gray-600/30 px-2 py-1 rounded-full">
+              Coming Soon
             </span>
           </motion.div>
 
@@ -96,19 +96,19 @@ export default function Platforms() {
               ))}
             </div>
             <span className="mt-4 inline-block text-[10px] font-bold bg-gray-700/50 text-gray-500 border border-gray-600/30 px-2 py-1 rounded-full">
-              Q1 2027
+              Coming Soon
             </span>
           </motion.div>
         </div>
 
-        {/* Recall.ai attribution */}
+        {/* Infrastructure attribution */}
         <motion.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           className="text-xs text-gray-600"
         >
-          Powered by Recall.ai managed bot infrastructure — no bot account setup required for attendees.
+          Powered by enterprise-grade bot infrastructure — no bot account setup required for attendees.
         </motion.p>
       </div>
     </section>
